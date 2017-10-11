@@ -1,4 +1,4 @@
-{% set version = '0.8-2' %}
+{% set version = '0.8-3' %}
 
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
@@ -12,16 +12,22 @@ source:
   url:
     - https://cran.r-project.org/src/contrib/ctv_{{ version }}.tar.gz
     - https://cran.r-project.org/src/contrib/Archive/ctv/ctv_{{ version }}.tar.gz
-  sha256: 3b2f7708eb1fdfd8124ab1d0499e17b824eb9d427642d166abdb886eececfd76
+  sha256: 16f377a6f15d43a6ca8b3933a60faf63b69d0966f011032862b55df5be2f03af
+
+  # patches:
+   # List any patch files here
+   # - fix.patch
 
 build:
+  # If this is a new build for the same version, increment the build number.
   number: 0
-  skip: true  # [win32]
 
+  # This is required to make R link correctly on Linux.
   rpaths:
     - lib/R/lib/
     - lib/
 
+# Suggests: XML
 requirements:
   build:
     - r-base
@@ -31,8 +37,15 @@ requirements:
 
 test:
   commands:
-    - $R -e "library('ctv')"  # [not win]
+    # You can put additional test commands to be run here.
+    - $R -e "library('ctv')"           # [not win]
     - "\"%R%\" -e \"library('ctv')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
 
 about:
   home: https://CRAN.R-project.org/package=ctv
@@ -47,3 +60,26 @@ extra:
   recipe-maintainers:
     - johanneskoester
     - bgruening
+    - mingwandroid
+
+# The original CRAN metadata for this package was:
+
+# Package: ctv
+# Version: 0.8-3
+# Date: 2017-10-07
+# Title: CRAN Task Views
+# Authors@R: c(person(given = "Achim", family = "Zeileis", role = c("aut", "cre"), email = "Achim.Zeileis@R-project.org", comment = c(ORCID = "0000-0003-0918-3766")), person(given = "Kurt", family = "Hornik", role = "aut", email = "Kurt.Hornik@R-project.org"))
+# Description: Infrastructure for task views to CRAN-style repositories: Querying task views and installing the associated packages (client-side tools), generating HTML pages and storing task view information in the repository (server-side tools).
+# Depends: R (>= 2.13.0), utils
+# Suggests: XML
+# License: GPL-2 | GPL-3
+# NeedsCompilation: no
+# Packaged: 2017-10-07 08:36:23 UTC; zeileis
+# Author: Achim Zeileis [aut, cre] (0000-0003-0918-3766), Kurt Hornik [aut]
+# Maintainer: Achim Zeileis <Achim.Zeileis@R-project.org>
+# Repository: CRAN
+# Date/Publication: 2017-10-07 08:56:09 UTC
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
